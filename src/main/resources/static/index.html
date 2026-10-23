@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Daycare Slot Exchange — Pilot</title>
+<link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+<header>
+  <h1>Daycare Slot Exchange <span class="tag">pilot · one neighborhood</span></h1>
+  <div class="header-right">
+    <!-- This is the bell -->
+    <div id="bellWrap" class="bell-wrap" hidden>
+      <button id="bellBtn" class="bell-btn" aria-label="Notifications">
+        🔔 <span id="bellCount" class="bell-count" hidden>0</span>
+      </button>
+      <div id="bellPanel" class="bell-panel" hidden>
+        <div class="bell-panel-head">
+          <strong>Matches near you</strong>
+          <button id="bellClose" class="link-btn">close</button>
+        </div>
+        <div id="bellList" class="bell-list">
+          <p class="hint">No matches yet.</p>
+        </div>
+      </div>
+    </div>
+    <!-- This is where the login buttons go -->
+    <div id="whoami">Loading...</div>
+  </div>
+</header>
+
+<nav class="tabs">
+  <button data-tab="alerts" class="active">1 · Alert Setup</button>
+  <button data-tab="report">2 · Report a Slot</button>
+  <button data-tab="feed">3 · Feed</button>
+  <button data-tab="profile">4 · Credits &amp; Tier</button>
+  <button data-tab="demo" class="demo">▶ Demo: Trusted vs New</button>
+</nav>
+
+<main>
+  <section id="tab-alerts" class="tab active">
+    <h2>Where should we look for you?</h2>
+    <p class="hint">We'll notify you when a matching slot is reported inside this geofence.</p>
+    <label>Age group
+      <select id="ageGroup">
+        <option value="INFANT">Infant (0–12 mo)</option>
+        <option value="TODDLER">Toddler</option>
+        <option value="PRESCHOOL">Preschool</option>
+      </select>
+    </label>
+    <label>Center latitude <input id="lat" type="number" step="0.0001" value="33.4484"/></label>
+    <label>Center longitude <input id="lng" type="number" step="0.0001" value="-112.0740"/></label>
+    <label>Radius (km) <input id="radiusKm" type="number" step="0.5" value="10"/></label>
+    <button id="saveAlert">Save alert</button>
+    <pre id="alertOut" class="out"></pre>
+  </section>
+
+  <section id="tab-report" class="tab">
+    <h2>Report a slot you found</h2>
+    <p class="hint">You earn <b>+2 credits</b> once 2 other parents verify it. A screenshot speeds up verification.</p>
+
+    <fieldset>
+      <legend>Optional: screenshot</legend>
+      <input type="file" id="shot" accept="image/*"/>
+      <button id="evalShot" type="button">Evaluate screenshot</button>
+      <div id="evalResult" class="out"></div>
+    </fieldset>
+
+    <form id="reportForm">
+      <label>Provider name <input name="providerName" id="f_providerName" required/></label>
+      <label>Age group
+        <select name="ageGroup" id="f_ageGroup" required>
+          <option value="INFANT">Infant</option>
+          <option value="TODDLER">Toddler</option>
+          <option value="PRESCHOOL">Preschool</option>
+        </select>
+      </label>
+      <label>Latitude <input name="lat" type="number" step="0.0001" value="33.4484" required/></label>
+      <label>Longitude <input name="lng" type="number" step="0.0001" value="-112.0740" required/></label>
+      <label>Address hint <input name="addressHint" id="f_addressHint" placeholder="e.g. 3rd St &amp; Osborn"/></label>
+      <label>Available from <input name="startTime" id="f_startTime" type="datetime-local"/></label>
+      <label>Available until <input name="endTime" id="f_endTime" type="datetime-local"/></label>
+      <label>Notes <textarea name="notes" rows="2"></textarea></label>
+      <button type="submit">Submit report (+2 credits when verified)</button>
+    </form>
+    <pre id="reportOut" class="out"></pre>
+  </section>
+
+  <section id="tab-feed" class="tab">
+    <h2>Slot feed</h2>
+    <p class="hint" id="tierNote"></p>
+    <div id="feedList"></div>
+  </section>
+
+  <section id="tab-profile" class="tab">
+    <h2>Credits &amp; tier</h2>
+    <div id="profileOut"></div>
+  </section>
+
+  <section id="tab-demo" class="tab">
+    <h2>Money shot: same slot, two accounts, side by side</h2>
+    <p class="hint">
+      Click the button, then watch the two frames. Both are logged in as different accounts,
+      watching the same geofence. The Trusted frame shows the slot immediately. The New frame
+      shows <em>🔒 Available in 24h</em>. Open DevTools → Network → <code>/api/feed</code> in
+     
